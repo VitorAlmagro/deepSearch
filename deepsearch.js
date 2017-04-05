@@ -1,4 +1,31 @@
-var factory = (elemento, linha) => {
+/* 
+
+Lógica
+
+procedimento Busca(G: Grafo)
+    Para Cada vértice v de G:
+    Marque v como não visitado
+    Para Cada vértice v de G:
+    Se v não foi visitado:
+    Busca-Prof(v)
+
+procedimento Busca-Prof(v: vértice)
+    Marque v como visitado
+    Para Cada vértice w adjacente a v:
+    Se w não foi visitado:
+    Busca-Prof(w)
+
+*/
+
+var imprimir = (x, y) => {
+    console.log("Verificando se " + x + " é igual a " + y);
+};
+
+var imprimir2 = (x) => {
+    console.log("verificando se " + x + " foi visitado");
+};
+
+var fabrica = (elemento, linha) => {
 
     let seLigaCom  = [];
 
@@ -13,73 +40,20 @@ var factory = (elemento, linha) => {
 
     });
 
-    //console.log(linha)
-
     // colocando no array proximo todos os elementos que possui 1 na matriz
     linha.forEach(function(element, index){
 
         if (element == 1) {
+
             seLigaCom.push(index);
         }
 
     });
 
-    //console.log(proximo);
-
     return {
         elemento: elemento,
         seLigaCom: seLigaCom,
-        visitado: false,
-        filhosVisitados: false
-    }
-};
-
-
-var search = (elementoBusca, matriz) => {
-
-    let linhaInicial = matriz[0];
-
-    let aux = true;
-
-    while(aux) {
-
-        linhaInicial.visitado = true;
-
-        if (linhaInicial.elemento == elementoBusca) {
-            console.log('É O ELEMENTO');
-        } else {
-
-            let auxLoop = 0;
-
-            while(auxLoop < linhaInicial.seLigaCom.length) {
-
-                if (!matriz[auxLoop].visitado) {
-                    
-                    console.log(matriz[auxLoop]);
-
-                    let auxLoop2 = 0;
-
-                    while(auxLoop2 < matriz[auxLoop].seLigaCom.length) {
-
-                        if (!matriz[auxLoop].seLigaCom[auxLoop2].visitado) {
-                            console.log(matriz[auxLoop].seLigaCom[auxLoop2]);
-                        }
-                        
-
-                        auxLoop2++;
-                    }
-                    
-
-                }
-                
-
-                auxLoop++;
-            }
-
-        }
-
-
-        aux = false;
+        visitado: false
     }
 
 };
@@ -95,16 +69,110 @@ var linhaE = [1, 0, 0, 0, 0, 1, 0];
 var linhaF = [0, 1, 0, 0, 1, 0, 0];
 var linhaG = [0, 0, 1, 0, 0, 0, 0];
 
-var linha1 = factory(elementos[0], linhaA);
-var linha2 = factory(elementos[1], linhaB);
-var linha3 = factory(elementos[2], linhaC);
-var linha4 = factory(elementos[3], linhaD);
-var linha5 = factory(elementos[4], linhaE);
-var linha6 = factory(elementos[5], linhaF);
-var linha7 = factory(elementos[6], linhaG);
+var linha1 = fabrica(elementos[0], linhaA);
+var linha2 = fabrica(elementos[1], linhaB);
+var linha3 = fabrica(elementos[2], linhaC);
+var linha4 = fabrica(elementos[3], linhaD);
+var linha5 = fabrica(elementos[4], linhaE);
+var linha6 = fabrica(elementos[5], linhaF);
+var linha7 = fabrica(elementos[6], linhaG);
 
-var matriz = [];
+var grafo = [];
 
-matriz.push(linha1, linha2, linha3, linha4, linha5, linha6, linha7);
+var achou;
 
-search('B', matriz);
+grafo.push(linha1, linha2, linha3, linha4, linha5, linha6, linha7);
+
+var searchElement;
+
+ var busca = (grafo, elementoBuscado) => {
+
+    achou = false;
+
+    let tamanho = grafo.length;
+
+    let aux = 0;
+
+    searchElement = elementoBuscado;
+
+    while(aux <= tamanho) {
+
+        // pegando linha por linha do grafo
+        let vertice = grafo[aux];
+
+        imprimir2(vertice.elemento);
+        if (!vertice.visitado) {
+
+            imprimir(vertice.elemento, searchElement);
+
+            // se o elemento a ser buscado é o mesmo da linha
+            if (vertice.elemento == searchElement) {
+
+                achou = true;
+
+                console.log('é o elemento');
+            
+                break;
+            }
+
+            // chamando a busca recursiva
+            buscaProfundidade(vertice);
+
+            if (achou) {
+
+                break;
+            }
+        }
+
+        aux++;
+    }
+
+ };
+
+ var buscaProfundidade = (vertice) => {
+
+    vertice.visitado = true;
+
+    let seLigacom = vertice.seLigaCom;
+
+    let tamanho = seLigacom.length;
+
+    let aux = 0;
+
+    while(aux < tamanho) {
+
+        let linhaAux = grafo[seLigacom[aux]];
+
+        aux++;
+
+        imprimir2(linhaAux.elemento);
+        if (!linhaAux.visitado) {
+
+            imprimir(linhaAux.elemento, searchElement);
+
+            // se o elemento a ser buscado é o mesmo da linha
+            if (linhaAux.elemento == searchElement) {
+
+                achou = true;
+
+                break;
+
+            } else {
+                
+                // executando a recursividade
+                buscaProfundidade(linhaAux);
+
+                if (achou) {
+
+                    break;
+                }
+
+            }
+        }
+        
+    }
+
+ };
+
+
+ busca(grafo, 'D');
