@@ -95,7 +95,7 @@ var searchElement;
 
     searchElement = elementoBuscado;
 
-    while(aux <= tamanho) {
+    while(aux < tamanho) {
 
         // pegando linha por linha do grafo
         let vertice = grafo[aux];
@@ -110,7 +110,7 @@ var searchElement;
 
                 achou = true;
 
-                console.log('é o elemento');
+                console.log('É O ELEMENTO');
             
                 break;
             }
@@ -125,6 +125,10 @@ var searchElement;
         }
 
         aux++;
+    }
+
+    if (!achou) {
+        console.log('elemento não existe');
     }
 
  };
@@ -155,6 +159,8 @@ var searchElement;
 
                 achou = true;
 
+                console.log('É O ELEMENTO');
+
                 break;
 
             } else {
@@ -175,4 +181,4 @@ var searchElement;
  };
 
 
- busca(grafo, 'D');
+ busca(grafo, 'G');
