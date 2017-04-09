@@ -2,45 +2,28 @@
 
 Lógica
 
-procedimento Busca(G: Grafo)
-    Para Cada vértice v de G:
-    Marque v como não visitado
-    Para Cada vértice v de G:
-    Se v não foi visitado:
-    Busca-Prof(v)
+    procedimento Busca(G: Grafo)
+        Para Cada vértice v de G:
+        Marque v como não visitado
+        Para Cada vértice v de G:
+        Se v não foi visitado:
+        Busca-Prof(v)
 
-procedimento Busca-Prof(v: vértice)
-    Marque v como visitado
-    Para Cada vértice w adjacente a v:
-    Se w não foi visitado:
-    Busca-Prof(w)
+    procedimento Busca-Prof(v: vértice)
+        Marque v como visitado
+        Para Cada vértice w adjacente a v:
+        Se w não foi visitado:
+        Busca-Prof(w)
 
 */
 
-var imprimir = (x, y) => {
-    console.log("Verificando se " + x + " é igual a " + y);
-};
-
-var imprimir2 = (x) => {
-    console.log("verificando se " + x + " foi visitado");
-};
-
+// Função que vai mapear um elemento e retornar um objeto
 var fabrica = (elemento, linha) => {
 
+    // Array que armazena todos os vertices adjacentes
     let seLigaCom  = [];
 
-    let indexAux;
-
-    // buscando o indice do elemento no array elementos    
-    elementos.find(function(valor, index) {
-
-        if (valor == elemento) {
-            indexAux = index;
-        }
-
-    });
-
-    // colocando no array proximo todos os elementos que possui 1 na matriz
+    // colocando no seLigaCom todos os elementos adjacentes ao vertice
     linha.forEach(function(element, index){
 
         if (element == 1) {
@@ -58,6 +41,7 @@ var fabrica = (elemento, linha) => {
 
 };
 
+// Definindo os elementos do grafo
 var elementos = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
            /* A  B  C  D  E  F  G */
@@ -81,11 +65,13 @@ var grafo = [];
 
 var achou;
 
-grafo.push(linha1, linha2, linha3, linha4, linha5, linha6, linha7);
-
 var searchElement;
 
- var busca = (grafo, elementoBuscado) => {
+
+grafo.push(linha1, linha2, linha3, linha4, linha5, linha6, linha7);
+
+
+var busca = (grafo, elementoBuscado) => {
 
     achou = false;
 
@@ -97,20 +83,21 @@ var searchElement;
 
     while(aux < tamanho) {
 
-        // pegando linha por linha do grafo
+        // armazenando a linha da interação no vertice
         let vertice = grafo[aux];
 
-        imprimir2(vertice.elemento);
+        console.log("verificando se " + vertice.elemento + " foi visitado [ " + vertice.visitado + " ]");
+
         if (!vertice.visitado) {
 
-            imprimir(vertice.elemento, searchElement);
+            console.log("Verificando se " + vertice.elemento + " é igual a " + searchElement);
 
-            // se o elemento a ser buscado é o mesmo da linha
+            // se o elemento a ser buscado é o mesmo da linha, fim
             if (vertice.elemento == searchElement) {
 
                 achou = true;
 
-                console.log('É O ELEMENTO');
+                console.log('******** É O ELEMENTO ********');
             
                 break;
             }
@@ -118,25 +105,26 @@ var searchElement;
             // chamando a busca recursiva
             buscaProfundidade(vertice);
 
-            if (achou) {
-
-                break;
-            }
+            if (achou) break;
+            
         }
 
         aux++;
     }
 
     if (!achou) {
-        console.log('elemento não existe');
+
+        console.log('O ELEMENTO NÃO EXISTE');
     }
 
- };
+};
 
- var buscaProfundidade = (vertice) => {
+var buscaProfundidade = (vertice) => {
 
+    // marcando que esse vertice já foi visitado
     vertice.visitado = true;
 
+    // definindo uma variavel local com os vertices adjacentes ao da interação
     let seLigacom = vertice.seLigaCom;
 
     let tamanho = seLigacom.length;
@@ -145,21 +133,24 @@ var searchElement;
 
     while(aux < tamanho) {
 
+        // definindo uma variavel local como sendo o vertice de adjacencia da interação
         let linhaAux = grafo[seLigacom[aux]];
 
         aux++;
 
-        imprimir2(linhaAux.elemento);
+        console.log("verificando se " + linhaAux.elemento + " foi visitado [ " + linhaAux.visitado + " ]");
+
+        // se o vertice ainda não foi visitado
         if (!linhaAux.visitado) {
 
-            imprimir(linhaAux.elemento, searchElement);
+            console.log("Verificando se " + linhaAux.elemento + " é igual a " + searchElement);
 
-            // se o elemento a ser buscado é o mesmo da linha
+            // se o elemento a ser buscado é o mesmo da linha, fim
             if (linhaAux.elemento == searchElement) {
 
                 achou = true;
 
-                console.log('É O ELEMENTO');
+                console.log('******** É O ELEMENTO ********');
 
                 break;
 
@@ -168,17 +159,14 @@ var searchElement;
                 // executando a recursividade
                 buscaProfundidade(linhaAux);
 
-                if (achou) {
-
-                    break;
-                }
-
+                if (achou) break;
+            
             }
         }
         
     }
 
- };
+};
 
 
- busca(grafo, 'G');
+busca(grafo, 'C');
