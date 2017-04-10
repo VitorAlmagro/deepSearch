@@ -17,156 +17,140 @@ Lógica
 
 */
 
-// Função que vai mapear um elemento e retornar um objeto
-var fabrica = (elemento, linha) => {
+var factory = (element, line) => {
 
-    // Array que armazena todos os vertices adjacentes
-    let seLigaCom  = [];
+    let adjacentVertex = [];
 
-    // colocando no seLigaCom todos os elementos adjacentes ao vertice
-    linha.forEach(function(element, index){
+    line.forEach(function(element, index){
 
         if (element == 1) {
 
-            seLigaCom.push(index);
-        }
+            adjacentVertex.push(index);
 
+        }
     });
 
     return {
-        elemento: elemento,
-        seLigaCom: seLigaCom,
-        visitado: false
+        element: element,
+        adjacentVertex: adjacentVertex,
+        visited: false
     }
 
 };
 
-// Definindo os elementos do grafo
-var elementos = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+var elements = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
            /* A  B  C  D  E  F  G */
-var linhaA = [0, 1, 1, 0, 1, 0, 0];
-var linhaB = [1, 0, 0, 1, 0, 1, 0];
-var linhaC = [1, 0, 0, 0, 0, 0, 1];
-var linhaD = [0, 1, 0, 0, 0, 0, 0];
-var linhaE = [1, 0, 0, 0, 0, 1, 0];
-var linhaF = [0, 1, 0, 0, 1, 0, 0];
-var linhaG = [0, 0, 1, 0, 0, 0, 0];
+var lineA = [0, 1, 1, 0, 1, 0, 0];
+var lineB = [1, 0, 0, 1, 0, 1, 0];
+var lineC = [1, 0, 0, 0, 0, 0, 1];
+var lineD = [0, 1, 0, 0, 0, 0, 0];
+var lineE = [1, 0, 0, 0, 0, 1, 0];
+var lineF = [0, 1, 0, 0, 1, 0, 0];
+var lineG = [0, 0, 1, 0, 0, 0, 0];
 
-var linha1 = fabrica(elementos[0], linhaA);
-var linha2 = fabrica(elementos[1], linhaB);
-var linha3 = fabrica(elementos[2], linhaC);
-var linha4 = fabrica(elementos[3], linhaD);
-var linha5 = fabrica(elementos[4], linhaE);
-var linha6 = fabrica(elementos[5], linhaF);
-var linha7 = fabrica(elementos[6], linhaG);
+var line1 = factory(elements[0], lineA);
+var line2 = factory(elements[1], lineB);
+var line3 = factory(elements[2], lineC);
+var line4 = factory(elements[3], lineD);
+var line5 = factory(elements[4], lineE);
+var line6 = factory(elements[5], lineF);
+var line7 = factory(elements[6], lineG);
 
-var grafo = [];
+var graph = [];
 
-var achou;
+var found;
 
-var searchElement;
+var _searchElement;
+
+graph.push(line1, line2, line3, line4, line5, line6, line7);
 
 
-grafo.push(linha1, linha2, linha3, linha4, linha5, linha6, linha7);
+var search = (graph, searchElement) => {
 
+    _searchElement = searchElement;
 
-var busca = (grafo, elementoBuscado) => {
+    found = false;
 
-    achou = false;
+    let numberOfLines = graph.length;
 
-    let tamanho = grafo.length;
+    let counter = 0;
 
-    let aux = 0;
+    while(counter < numberOfLines) {
 
-    searchElement = elementoBuscado;
+        let vertex = graph[counter];
 
-    while(aux < tamanho) {
+        console.log("verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
 
-        // armazenando a linha da interação no vertice
-        let vertice = grafo[aux];
+        if (!vertex.visited) {
 
-        console.log("verificando se " + vertice.elemento + " foi visitado [ " + vertice.visitado + " ]");
+            console.log("Verificando se " + vertex.element + " é igual a " + _searchElement);
 
-        if (!vertice.visitado) {
+            if (vertex.element == _searchElement) {
 
-            console.log("Verificando se " + vertice.elemento + " é igual a " + searchElement);
-
-            // se o elemento a ser buscado é o mesmo da linha, fim
-            if (vertice.elemento == searchElement) {
-
-                achou = true;
+                found = true;
 
                 console.log('******** É O ELEMENTO ********');
-            
+
                 break;
+
             }
 
-            // chamando a busca recursiva
-            buscaProfundidade(vertice);
+            deepSearch(vertex);
 
-            if (achou) break;
-            
+            if (found) break;
+
         }
-
-        aux++;
+        counter++;
     }
 
-    if (!achou) {
+
+    if (!found) {
 
         console.log('O ELEMENTO NÃO EXISTE');
+
     }
 
 };
 
-var buscaProfundidade = (vertice) => {
 
-    // marcando que esse vertice já foi visitado
-    vertice.visitado = true;
+var deepSearch = (vertex) => {
 
-    // definindo uma variavel local com os vertices adjacentes ao da interação
-    let seLigacom = vertice.seLigaCom;
+    vertex.visited = true;
 
-    let tamanho = seLigacom.length;
+    let adjacentVertex = vertex.adjacentVertex;
 
-    let aux = 0;
+    let size = adjacentVertex.length;
 
-    while(aux < tamanho) {
+    let counter = 0;
 
-        // definindo uma variavel local como sendo o vertice de adjacencia da interação
-        let linhaAux = grafo[seLigacom[aux]];
+    while(counter < size) {
 
-        aux++;
+        let vertex = graph[adjacentVertex[counter]];
 
-        console.log("verificando se " + linhaAux.elemento + " foi visitado [ " + linhaAux.visitado + " ]");
+        counter++;
 
-        // se o vertice ainda não foi visitado
-        if (!linhaAux.visitado) {
+        console.log("verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
 
-            console.log("Verificando se " + linhaAux.elemento + " é igual a " + searchElement);
+        if (!vertex.visited) {
 
-            // se o elemento a ser buscado é o mesmo da linha, fim
-            if (linhaAux.elemento == searchElement) {
+            console.log("Verificando se " + vertex.element + " é igual a " + _searchElement);
 
-                achou = true;
+            if (vertex.element == _searchElement) {
+
+                found = true;
 
                 console.log('******** É O ELEMENTO ********');
 
                 break;
+            } 
 
-            } else {
-                
-                // executando a recursividade
-                buscaProfundidade(linhaAux);
+            deepSearch(vertex);
 
-                if (achou) break;
-            
-            }
+            if (found) break;
         }
-        
     }
 
 };
 
-
-busca(grafo, 'C');
+search(graph, 'C');
