@@ -1,7 +1,5 @@
 /* 
-
 Lógica
-
     procedimento Busca(G: Grafo)
         Para Cada vértice v de G:
         Marque v como não visitado
@@ -14,7 +12,6 @@ Lógica
         Para Cada vértice w adjacente a v:
         Se w não foi visitado:
         Busca-Prof(w)
-
 */
 
 var factory = (element, line) => {
@@ -23,11 +20,8 @@ var factory = (element, line) => {
 
     line.forEach(function(element, index){
 
-        if (element == 1) {
+        if (element == 1) adjacentVertex.push(index);
 
-            adjacentVertex.push(index);
-
-        }
     });
 
     return {
@@ -40,7 +34,13 @@ var factory = (element, line) => {
 
 var elements = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
-           /* A  B  C  D  E  F  G */
+var graph = [];
+
+var found;
+
+var _searchElement;
+
+          /* A  B  C  D  E  F  G */
 var lineA = [0, 1, 1, 0, 1, 0, 0];
 var lineB = [1, 0, 0, 1, 0, 1, 0];
 var lineC = [1, 0, 0, 0, 0, 0, 1];
@@ -49,22 +49,15 @@ var lineE = [1, 0, 0, 0, 0, 1, 0];
 var lineF = [0, 1, 0, 0, 1, 0, 0];
 var lineG = [0, 0, 1, 0, 0, 0, 0];
 
-var line1 = factory(elements[0], lineA);
-var line2 = factory(elements[1], lineB);
-var line3 = factory(elements[2], lineC);
-var line4 = factory(elements[3], lineD);
-var line5 = factory(elements[4], lineE);
-var line6 = factory(elements[5], lineF);
-var line7 = factory(elements[6], lineG);
+var vertex1 = factory(elements[0], lineA);
+var vertex2 = factory(elements[1], lineB);
+var vertex3 = factory(elements[2], lineC);
+var vertex4 = factory(elements[3], lineD);
+var vertex5 = factory(elements[4], lineE);
+var vertex6 = factory(elements[5], lineF);
+var vertex7 = factory(elements[6], lineG);
 
-var graph = [];
-
-var found;
-
-var _searchElement;
-
-graph.push(line1, line2, line3, line4, line5, line6, line7);
-
+graph.push(vertex1, vertex2, vertex3, vertex4, vertex5, vertex6, vertex7);
 
 var search = (graph, searchElement) => {
 
@@ -72,44 +65,26 @@ var search = (graph, searchElement) => {
 
     found = false;
 
-    let numberOfLines = graph.length;
+    graph.forEach(function(element) {
+        element.visited = false;
+    });
+
+    let numberOfVertex = graph.length;
 
     let counter = 0;
 
-    while(counter < numberOfLines) {
+    while(counter < numberOfVertex) {
 
         let vertex = graph[counter];
 
-        console.log("verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
+        checkVertex(vertex);
 
-        if (!vertex.visited) {
+        if (found) break;
 
-            console.log("Verificando se " + vertex.element + " é igual a " + _searchElement);
-
-            if (vertex.element == _searchElement) {
-
-                found = true;
-
-                console.log('******** É O ELEMENTO ********');
-
-                break;
-
-            }
-
-            deepSearch(vertex);
-
-            if (found) break;
-
-        }
         counter++;
     }
 
-
-    if (!found) {
-
-        console.log('O ELEMENTO NÃO EXISTE');
-
-    }
+    if (!found) console.log('O ELEMENTO NÃO EXISTE');
 
 };
 
@@ -128,29 +103,41 @@ var deepSearch = (vertex) => {
 
         let vertex = graph[adjacentVertex[counter]];
 
+        checkVertex(vertex);
+
+        if (found) break;
+
         counter++;
 
-        console.log("verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
-
-        if (!vertex.visited) {
-
-            console.log("Verificando se " + vertex.element + " é igual a " + _searchElement);
-
-            if (vertex.element == _searchElement) {
-
-                found = true;
-
-                console.log('******** É O ELEMENTO ********');
-
-                break;
-            } 
-
-            deepSearch(vertex);
-
-            if (found) break;
-        }
     }
 
 };
 
-search(graph, 'C');
+
+var checkVertex = (vertex) => {
+
+    console.log("Verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
+
+    if (!vertex.visited) {
+
+        console.log("Verificando se " + vertex.element + " é igual a " + _searchElement);
+
+        if (vertex.element == _searchElement) {
+
+            found = true;
+
+             console.log('******** É O ELEMENTO ********');
+
+            return;
+
+        }
+
+        deepSearch(vertex);
+
+        if (found) return;
+
+    }
+
+};
+
+search(graph, 'D');
