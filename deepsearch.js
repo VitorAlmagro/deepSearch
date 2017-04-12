@@ -1,5 +1,7 @@
-/* 
+/*
+ 
 Lógica
+
     procedimento Busca(G: Grafo)
         Para Cada vértice v de G:
         Marque v como não visitado
@@ -16,29 +18,25 @@ Lógica
 
 var factory = (element, line) => {
 
-    let adjacentVertex = [];
+    let indexOfAdjacentVertex = [];
 
     line.forEach(function(element, index){
 
-        if (element == 1) adjacentVertex.push(index);
+        if (element == 1) indexOfAdjacentVertex.push(index);
 
     });
 
     return {
         element: element,
-        adjacentVertex: adjacentVertex,
+        indexOfAdjacentVertex: indexOfAdjacentVertex,
         visited: false
     }
 
 };
 
-var elements = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-
 var graph = [];
 
-var found;
-
-var _searchElement;
+var searchElement;
 
           /* A  B  C  D  E  F  G */
 var lineA = [0, 1, 1, 0, 1, 0, 0];
@@ -49,65 +47,56 @@ var lineE = [1, 0, 0, 0, 0, 1, 0];
 var lineF = [0, 1, 0, 0, 1, 0, 0];
 var lineG = [0, 0, 1, 0, 0, 0, 0];
 
-var vertex1 = factory(elements[0], lineA);
-var vertex2 = factory(elements[1], lineB);
-var vertex3 = factory(elements[2], lineC);
-var vertex4 = factory(elements[3], lineD);
-var vertex5 = factory(elements[4], lineE);
-var vertex6 = factory(elements[5], lineF);
-var vertex7 = factory(elements[6], lineG);
+var vertexA = factory('A', lineA);
+var vertexB = factory('B', lineB);
+var vertexC = factory('C', lineC);
+var vertexD = factory('D', lineD);
+var vertexE = factory('E', lineE);
+var vertexF = factory('F', lineF);
+var vertexG = factory('G', lineG);
 
-graph.push(vertex1, vertex2, vertex3, vertex4, vertex5, vertex6, vertex7);
+graph.push(vertexA, vertexB, vertexC, vertexD, vertexE, vertexF, vertexG);
 
-var search = (graph, searchElement) => {
+var search = (graph, _searchElement) => {
 
-    _searchElement = searchElement;
+    let _found = false;
 
-    found = false;
+    searchElement = _searchElement;
 
     graph.forEach(function(element) {
         element.visited = false;
     });
 
-    let numberOfVertex = graph.length;
+    for (let vertex of graph) {
+        
+        _found = checkVertex(vertex) || deepSearch(vertex);
 
-    let counter = 0;
+        if (_found) break;
 
-    while(counter < numberOfVertex) {
-
-        let vertex = graph[counter];
-
-        checkVertex(vertex);
-
-        if (found) break;
-
-        counter++;
     }
 
-    if (!found) console.log('O ELEMENTO NÃO EXISTE');
+    if (!_found) console.log('******** O ELEMENTO NÃO EXISTE ********');
 
 };
 
 
 var deepSearch = (vertex) => {
 
+    if (vertex.visited) return;
+
+    let _found = false;
+
     vertex.visited = true;
 
-    let adjacentVertex = vertex.adjacentVertex;
+    let indexOfAdjacentVertex = vertex.indexOfAdjacentVertex;
 
-    let size = adjacentVertex.length;
+    for(let index of indexOfAdjacentVertex) {
 
-    let counter = 0;
+        let vertex = graph[index];
 
-    while(counter < size) {
+        _found = checkVertex(vertex) || deepSearch(vertex);
 
-        let vertex = graph[adjacentVertex[counter]];
-
-        checkVertex(vertex);
-
-        if (found) break;
-
-        counter++;
+        if (_found) return true;
 
     }
 
@@ -116,26 +105,23 @@ var deepSearch = (vertex) => {
 
 var checkVertex = (vertex) => {
 
-    console.log("Verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
+    let _found = false;
+
+    console.log("==> Verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
 
     if (!vertex.visited) {
 
-        console.log("Verificando se " + vertex.element + " é igual a " + _searchElement);
+        console.log(" ==> Verificando se " + vertex.element + " é igual a " + searchElement + " [ " + (vertex.element == searchElement) + " ]");
 
-        if (vertex.element == _searchElement) {
+        if (vertex.element == searchElement) {
 
-            found = true;
+            _found = true;
 
-             console.log('******** É O ELEMENTO ********');
-
-            return;
+            console.log('******** ELEMENTO ENCONTRADO ********');
 
         }
 
-        deepSearch(vertex);
-
-        if (found) return;
-
+        return _found;
     }
 
 };
