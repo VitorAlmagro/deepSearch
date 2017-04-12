@@ -75,14 +75,13 @@ var search = (graph, _searchElement) => {
 
     }
 
-    if (!_found) console.log('******** O ELEMENTO NÃO EXISTE ********');
-
+    return _found;
 };
 
 
 var deepSearch = (vertex) => {
 
-    if (vertex.visited) return;
+    if (vertex.visited) return false;
 
     let _found = false;
 
@@ -96,9 +95,10 @@ var deepSearch = (vertex) => {
 
         _found = checkVertex(vertex) || deepSearch(vertex);
 
-        if (_found) return true;
-
+        if (_found) break;
     }
+
+    return _found;
 
 };
 
@@ -109,21 +109,15 @@ var checkVertex = (vertex) => {
 
     console.log("==> Verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
 
-    if (!vertex.visited) {
-
+    if (!vertex.visited)
         console.log(" ==> Verificando se " + vertex.element + " é igual a " + searchElement + " [ " + (vertex.element == searchElement) + " ]");
 
-        if (vertex.element == searchElement) {
-
-            _found = true;
-
-            console.log('******** ELEMENTO ENCONTRADO ********');
-
-        }
-
-        return _found;
-    }
-
+    return (!vertex.visited) && (vertex.element == searchElement);
 };
 
-search(graph, 'D');
+
+if (search(graph, 'D')) {
+    console.log('******** ELEMENTO ENCONTRADO ********');
+} else {
+    console.log('******** O ELEMENTO NÃO EXISTE ********');
+}
