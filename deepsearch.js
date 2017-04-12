@@ -105,8 +105,6 @@ var deepSearch = (vertex) => {
 
 var checkVertex = (vertex) => {
 
-    let _found = false;
-
     console.log("==> Verificando se " + vertex.element + " foi visitado [ " + vertex.visited + " ]");
 
     if (!vertex.visited)
